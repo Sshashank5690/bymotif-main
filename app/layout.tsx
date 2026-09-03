@@ -77,6 +77,11 @@ export const metadata: Metadata = {
     "geo.region": "IN",
     "geo.placename": "India",
   },
+  appleWebApp: {
+    capable: true,
+    title: site.shortName,
+    statusBarStyle: "default",
+  },
 };
 
 export const viewport: Viewport = {
