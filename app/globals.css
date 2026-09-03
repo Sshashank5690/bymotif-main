@@ -1,26 +1,388 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+   byMotif Studios — design tokens
+   Every value the interface uses is declared here. Components should
+   reference tokens, never raw hex or arbitrary spacing.
+------------------------------------------------------------------- */
+
+@theme {
+  /* --- Surfaces --------------------------------------------------- */
+  --color-ivory: #ffffff;
+  --color-canvas: #f7f5f2;
+  --color-paper: #fdfcfb;
+  --color-shell: #f0ede8;
+
+  /* --- Pastels ---------------------------------------------------- */
+  --color-rose: #d7b5b1;
+  --color-blush: #e8ccc7;
+  --color-mauve: #bfa5ad;
+  --color-champagne: #d7c6a5;
+  --color-sage: #b8bea7;
+  --color-olive: #a8aa91;
+  --color-powder: #c8d5da;
+  --color-lavender: #cec6d8;
+  --color-peach: #e8c8b4;
+
+  /* --- Ink -------------------------------------------------------- */
+  --color-ink: #2c2723;
+  --color-charcoal: #38312d;
+  --color-stone: #777069;
+  --color-quiet: #9a938a;
+  --color-burgundy: #76525a;
+
+  /* --- Hairlines -------------------------------------------------- */
+  --color-line: rgba(44, 39, 35, 0.12);
+  --color-line-soft: rgba(44, 39, 35, 0.07);
+  --color-line-light: rgba(251, 248, 243, 0.28);
+
+  /* --- Typography ------------------------------------------------- */
+  --font-serif: var(--font-fraunces), "Fraunces", "Source Serif 4", Georgia,
+    serif;
+  --font-sans: var(--font-manrope), "Manrope", ui-sans-serif, system-ui,
+    sans-serif;
+  --font-brand: var(--font-desire), var(--font-fraunces), "Fraunces", Georgia,
+    serif;
+
+  /* Display scale — refined, confident, editorial */
+  --text-display-xl: clamp(
+    1.875rem,
+    min(0.85rem + 4.5vw, 0.5rem + 6svh),
+    4.5rem
+  ); /* 30 → 72 */
+  --text-display-xl--line-height: 1.12;
+  --text-display-xl--letter-spacing: -0.02em;
+
+  --text-display-lg: clamp(1.625rem, 0.9rem + 3.2vw, 3.5rem); /* 26 → 56 */
+  --text-display-lg--line-height: 1.14;
+  --text-display-lg--letter-spacing: -0.018em;
+
+  --text-display-md: clamp(1.375rem, 0.85rem + 2.3vw, 2.75rem); /* 22 → 44 */
+  --text-display-md--line-height: 1.2;
+  --text-display-md--letter-spacing: -0.014em;
+
+  --text-display-sm: clamp(1.25rem, 0.9rem + 1.6vw, 2.25rem); /* 20 → 36 */
+  --text-display-sm--line-height: 1.22;
+  --text-display-sm--letter-spacing: -0.01em;
+
+  --text-title: clamp(1.125rem, 0.95rem + 0.8vw, 1.75rem); /* 18 → 28 */
+  --text-title--line-height: 1.28;
+  --text-title--letter-spacing: -0.006em;
+
+  /* Editorial body — comfortable, not bloated */
+  --text-lead: clamp(1rem, 0.93rem + 0.35vw, 1.25rem); /* 16 → 20 */
+  --text-lead--line-height: 1.68;
+
+  --text-body: clamp(0.9375rem, 0.9rem + 0.18vw, 1.0625rem); /* 15 → 17 */
+  --text-body--line-height: 1.74;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.65;
+
+  /* Uppercase editorial labels */
+  --text-label: 0.6875rem;
+  --text-label--line-height: 1.2;
+  --text-label--letter-spacing: 0.18em;
+
+  --text-label-lg: 0.8125rem;
+  --text-label-lg--line-height: 1.3;
+  --text-label-lg--letter-spacing: 0.14em;
+
+  /* --- Spacing rhythm --------------------------------------------- */
+  --spacing-gutter: clamp(1.25rem, 0.55rem + 3vw, 4.5rem);
+  --spacing-section: clamp(4rem, 2rem + 8vw, 9rem);
+  --spacing-section-sm: clamp(2.5rem, 1.5rem + 5vw, 5.5rem);
+
+  /* --- Radii ------------------------------------------------------- */
+  --radius-glass: 1.75rem;
+  --radius-panel: 1.25rem;
+  --radius-soft: 0.5rem;
+
+  /* --- Motion ------------------------------------------------------ */
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-vellum: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-settle: cubic-bezier(0.33, 1, 0.68, 1);
+
+  --duration-quick: 320ms;
+  --duration-soft: 620ms;
+  --duration-slow: 1100ms;
+  --duration-drift: 1600ms;
+
+  /* --- Containers --------------------------------------------------- */
+  --container-editorial: 88rem;
+  --container-reading: 46rem;
+  --container-wide: 108rem;
+
+  /* --- Shadows (warm, never grey) ----------------------------------- */
+  --shadow-lift: 0 1px 2px rgba(76, 60, 48, 0.04),
+    0 12px 28px -12px rgba(76, 60, 48, 0.14);
+  --shadow-float: 0 2px 6px rgba(76, 60, 48, 0.05),
+    0 30px 70px -30px rgba(76, 60, 48, 0.24);
+  --shadow-glass: 0 1px 1px rgba(255, 253, 250, 0.5) inset,
+    0 20px 50px -24px rgba(76, 60, 48, 0.28);
+}
+
+/* Non-utility tokens: consumed through the component classes below. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --glass-tint: 255, 253, 251;
+  --glass-blur: 18px;
+  --z-base: 1;
+  --z-raised: 10;
+  --z-nav: 60;
+  --z-overlay: 80;
+  --z-cursor: 90;
+
+  --header-height: 5.5rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ------------------------------------------------------------------
+   Base
+------------------------------------------------------------------- */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--color-blush);
+    color: var(--color-ink);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    text-wrap: balance;
+  }
+
+  /* Visible, warm focus ring — never removed, only refined. */
+  :focus-visible {
+    outline: 2px solid var(--color-burgundy);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Lenis owns scrolling; these are its required base styles. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  /*
+   * SplitText line masks clip overflow. Fraunces (and most display serifs)
+   * need room for descenders — pad the mask without changing visual rhythm.
+   */
+  [data-reveal] .reveal-line {
+    padding-bottom: 0.22em;
+    margin-bottom: -0.1em;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ------------------------------------------------------------------
+   Component surfaces
+------------------------------------------------------------------- */
+
+@layer components {
+  /* Frosted wedding stationery, not futuristic glass. */
+  .glass {
+    background-color: rgba(var(--glass-tint), 0.62);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.1);
+    border: 1px solid rgba(255, 253, 249, 0.55);
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glass-dark {
+    background-color: rgba(44, 39, 35, 0.28);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.05);
+    border: 1px solid rgba(251, 248, 243, 0.22);
+  }
+
+  /* The header surface once the page has moved: enough ivory to keep the
+     navigation legible over photography, without becoming a solid bar. */
+  .glass-bar {
+    background-color: rgba(var(--glass-tint), 0.78);
+    backdrop-filter: blur(18px) saturate(1.08);
+  }
+
+  /* Vellum: translucent paper laid over photography. */
+  .vellum {
+    background-color: rgba(253, 252, 251, 0.5);
+    backdrop-filter: blur(14px) saturate(1.04);
+    border: 1px solid rgba(255, 253, 249, 0.4);
+  }
+
+  .shell-x {
+    padding-inline: var(--spacing-gutter);
+  }
+
+  /* Underline that draws in from the left on hover. */
+  .link-reveal {
+    position: relative;
+    display: inline-block;
+  }
+
+  .link-reveal::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.15em;
+    width: 100%;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--duration-quick) var(--ease-editorial);
+  }
+
+  .link-reveal:hover::after,
+  .link-reveal:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Accessible native range sits invisible over the custom Apple-like track. */
+  .pricing-slider-native {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    background: transparent;
+  }
+
+  .pricing-slider-native::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .pricing-slider-native::-moz-range-thumb {
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  /* Signature CTA — warm slider gradient + soft grain */
+  .pricing-signature-cta {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(
+      120deg,
+      #e8c8b4 0%,
+      #e0b0a8 48%,
+      #c8b8d0 100%
+    );
+    color: var(--color-ink) !important;
+  }
+
+  .pricing-signature-cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.35;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    background-size: 120px 120px;
+  }
+
+  .pricing-signature-cta > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Utilities
+------------------------------------------------------------------- */
+
+@utility text-balance-pretty {
+  text-wrap: pretty;
+}
+
+/* Paper grain — keeps flat ivory from reading as digital emptiness. */
+@utility grain {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+  }
+}
+
+/* Editorial grain for photography — masks compression, adds texture. */
+@utility photo-grain {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.55;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.05' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.45'/%3E%3C/svg%3E");
+  }
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion — content must never depend on animation.
+------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Reveal primitives start hidden; force them visible. */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
 }
