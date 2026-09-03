@@ -7,19 +7,10 @@ import { RevealLines } from "@/components/motion/RevealLines";
 import { CapabilityList } from "@/components/shared/CapabilityList";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Process } from "@/components/home/Process";
+import { BreadcrumbSchema } from "@/components/seo/StructuredData";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Services",
-  description:
-    "Strategy, experience design, development, digital infrastructure and growth foundations — the full capability set byMotif Studios brings to a bespoke website.",
-  alternates: { canonical: "/services" },
-  openGraph: {
-    title: "Services — byMotif Studios",
-    description:
-      "Strategy, experience design, development, digital infrastructure and growth foundations.",
-    url: "/services",
-  },
-};
+export const metadata: Metadata = buildPageMetadata("services");
 
 const principles = [
   {
@@ -43,6 +34,12 @@ const principles = [
 export default function ServicesPage() {
   return (
     <>
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Services", path: "/services" },
+        ]}
+      />
       <PageHeader
         label="Services"
         title={

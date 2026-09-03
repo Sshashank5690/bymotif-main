@@ -3,24 +3,21 @@ import type { Metadata } from "next";
 import { ContactInvitation } from "@/components/home/ContactInvitation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { WorkIndex } from "@/components/work/WorkIndex";
+import { BreadcrumbSchema } from "@/components/seo/StructuredData";
 import { projects } from "@/content/projects";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Selected work",
-  description:
-    "Websites designed and built by byMotif Studios for luxury wedding photographers, event designers and creative studios across India, Australia, the United Kingdom and the United States.",
-  alternates: { canonical: "/work" },
-  openGraph: {
-    title: "Selected work — byMotif Studios",
-    description:
-      "Websites designed and built for luxury wedding photographers, event designers and creative studios.",
-    url: "/work",
-  },
-};
+export const metadata: Metadata = buildPageMetadata("work");
 
 export default function WorkPage() {
   return (
     <>
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Work", path: "/work" },
+        ]}
+      />
       <PageHeader
         label="Selected work"
         title={

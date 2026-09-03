@@ -2,13 +2,13 @@ export const site = {
   name: "byMotif Studios",
   shortName: "byMotif",
   founder: "Shashank Singh",
-  /** Update once the production domain is live — used for canonicals and OG. */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bymotif.studio",
+  /** Production domain — override with NEXT_PUBLIC_SITE_URL when needed. */
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bymotifstudios.in",
   email: "bymotifstudios@gmail.com",
   location: "India, working internationally",
   availability: "Currently taking on projects for 2026",
   description:
-    "byMotif Studios is an independent design and development studio creating bespoke digital experiences for wedding photographers, event studios and creative brands.",
+    "Independent design and development studio creating bespoke websites for wedding photographers, event studios and creative brands — so the right clients find you, trust you and enquire.",
   social: {
     instagram: "https://www.instagram.com/bymotifstudios/",
     instagramHandle: "@bymotifstudios",

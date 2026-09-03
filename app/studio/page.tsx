@@ -8,18 +8,11 @@ import { RevealImage } from "@/components/motion/RevealImage";
 import { RevealLines } from "@/components/motion/RevealLines";
 import { ArrowLink } from "@/components/ui/ArrowLink";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { BreadcrumbSchema } from "@/components/seo/StructuredData";
 import { site } from "@/content/site";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Studio",
-  description: `byMotif Studios is an independent design and development studio led by ${site.founder}, working with a small number of visually driven brands at a time.`,
-  alternates: { canonical: "/studio" },
-  openGraph: {
-    title: "Studio — byMotif Studios",
-    description: `An independent design and development studio led by ${site.founder}.`,
-    url: "/studio",
-  },
-};
+export const metadata: Metadata = buildPageMetadata("studio");
 
 const beliefs = [
   {
@@ -52,6 +45,12 @@ const audience = [
 export default function StudioPage() {
   return (
     <>
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Studio", path: "/studio" },
+        ]}
+      />
       <PageHeader
         label="The studio"
         title={

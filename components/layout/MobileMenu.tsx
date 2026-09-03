@@ -11,7 +11,7 @@ import { navigation, site } from "@/content/site";
 import { ease } from "@/lib/motion";
 import { useScrollControls } from "@/components/providers/SmoothScrollProvider";
 
-const links = [...navigation, { label: "Contact", href: "/contact" }];
+const links = [...navigation, { label: "Get in touch", href: "/contact" }];
 
 export function MobileMenu({
   open,

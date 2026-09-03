@@ -70,7 +70,7 @@ export function SiteHeader() {
                 href="/contact"
                 className="hidden rounded-full border border-ink/20 px-6 py-3 font-sans text-label font-medium uppercase tracking-[0.16em] text-ink transition-colors duration-(--duration-quick) ease-editorial hover:border-ink/50 hover:bg-ink hover:text-ivory lg:inline-flex"
               >
-                Start a conversation
+                Get in touch
               </Link>
 
               <button

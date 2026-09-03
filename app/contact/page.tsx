@@ -4,20 +4,11 @@ import { EnquiryForm } from "@/components/contact/EnquiryForm";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealLines } from "@/components/motion/RevealLines";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { BreadcrumbSchema } from "@/components/seo/StructuredData";
 import { site } from "@/content/site";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Start a conversation",
-  description:
-    "Tell byMotif Studios about your brand, the work you make and what you want people to feel when they find it. We read every enquiry ourselves.",
-  alternates: { canonical: "/contact" },
-  openGraph: {
-    title: "Start a conversation — byMotif Studios",
-    description:
-      "Tell us about your brand, the work you make and what you want people to feel when they find it.",
-    url: "/contact",
-  },
-};
+export const metadata: Metadata = buildPageMetadata("contact");
 
 const reassurances = [
   {
@@ -38,6 +29,12 @@ const reassurances = [
 export default function ContactPage() {
   return (
     <>
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact" },
+        ]}
+      />
       <section className="relative overflow-hidden px-gutter pb-section pt-40 lg:pt-48">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -left-[10%] -top-[20%] h-[34rem] w-[40rem] rounded-full bg-blush/25 blur-[140px]" />

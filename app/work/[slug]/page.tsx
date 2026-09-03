@@ -28,6 +28,14 @@ export async function generateMetadata(
   return {
     title,
     description: project.caseStudy.overview,
+    keywords: [
+      project.client,
+      project.industry,
+      ...project.services,
+      "wedding photographer website",
+      "bespoke website design",
+      "byMotif Studios",
+    ],
     alternates: { canonical: `/work/${project.slug}` },
     openGraph: {
       type: "article",

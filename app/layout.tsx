@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { OrganizationSchema } from "@/components/seo/StructuredData";
 import { site } from "@/content/site";
+import { seo } from "@/content/seo";
 
 import "./globals.css";
 
@@ -33,39 +34,48 @@ const desire = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — Digital experiences built around your brand`,
-    template: `%s — ${site.name}`,
+    default: seo.titleDefault,
+    template: seo.titleTemplate,
   },
-  description: site.description,
-  keywords: [
-    "wedding photographer website design",
-    "luxury wedding brand website",
-    "bespoke website design studio",
-    "photography portfolio website development",
-    "event design studio website",
-    "Next.js design and development studio",
-  ],
-  authors: [{ name: site.founder }],
+  description: seo.description,
+  keywords: [...seo.keywords],
+  authors: [{ name: site.founder, url: `${site.url}/studio` }],
   creator: site.founder,
   publisher: site.name,
-  alternates: { canonical: "/" },
+  category: "design",
+  applicationName: site.name,
+  referrer: "origin-when-cross-origin",
+  alternates: {
+    canonical: "/",
+    languages: { "en-GB": "/", en: "/" },
+  },
   openGraph: {
     type: "website",
-    locale: "en_GB",
+    locale: seo.locale,
     url: site.url,
     siteName: site.name,
-    title: `${site.name} — Digital experiences built around your brand`,
-    description: site.description,
+    title: seo.titleDefault,
+    description: seo.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — Digital experiences built around your brand`,
-    description: site.description,
+    title: seo.titleDefault,
+    description: seo.description,
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  other: {
+    "geo.region": "IN",
+    "geo.placename": "India",
   },
 };
 
@@ -77,7 +87,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="en-GB"
       className={`${fraunces.variable} ${manrope.variable} ${desire.variable} h-full antialiased`}
     >
       <body className="grain min-h-full bg-ivory">

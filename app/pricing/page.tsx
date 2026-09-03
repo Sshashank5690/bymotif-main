@@ -6,20 +6,15 @@ import { PricingExperience } from "@/components/pricing/PricingExperience";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealLines } from "@/components/motion/RevealLines";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import {
+  BreadcrumbSchema,
+  FaqSchema,
+} from "@/components/seo/StructuredData";
 import { pricingNotes } from "@/content/pricing";
+import { siteFaqs } from "@/content/seo";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Pricing",
-  description:
-    "Clear investment tiers for bespoke websites — Essential, Signature and Atelier. Design, development and systems under one roof.",
-  alternates: { canonical: "/pricing" },
-  openGraph: {
-    title: "Pricing — byMotif Studios",
-    description:
-      "Essential, Signature and Atelier — clear investment for a website that feels like your brand.",
-    url: "/pricing",
-  },
-};
+export const metadata: Metadata = buildPageMetadata("pricing");
 
 const reassurances = [
   {
@@ -36,9 +31,21 @@ const reassurances = [
   },
 ] as const;
 
+const pricingFaqs = siteFaqs.filter((faq) =>
+  /cost|Signature|long does|What does/i.test(faq.question),
+);
+
 export default function PricingPage() {
   return (
     <>
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Pricing", path: "/pricing" },
+        ]}
+      />
+      <FaqSchema faqs={pricingFaqs.length ? pricingFaqs : siteFaqs} />
+
       <PageHeader
         label="Pricing"
         title={
@@ -80,6 +87,34 @@ export default function PricingPage() {
                 </p>
                 <p className="mt-4 max-w-[34ch] font-sans text-small text-stone">
                   {item.value}
+                </p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-line-soft px-gutter py-section-sm">
+        <div className="mx-auto max-w-editorial">
+          <Reveal>
+            <SectionLabel>Common questions</SectionLabel>
+          </Reveal>
+          <RevealLines
+            as="h2"
+            className="mt-6 max-w-[20ch] font-serif text-display-md font-light text-ink"
+          >
+            Straight answers,{" "}
+            <em className="italic text-burgundy">no fluff.</em>
+          </RevealLines>
+
+          <div className="mt-10 divide-y divide-line-soft border-y border-line-soft">
+            {siteFaqs.map((faq, index) => (
+              <Reveal key={faq.question} delay={index * 0.04} className="py-7">
+                <h3 className="font-serif text-title font-light text-ink">
+                  {faq.question}
+                </h3>
+                <p className="mt-3 max-w-[62ch] font-sans text-small text-stone">
+                  {faq.answer}
                 </p>
               </Reveal>
             ))}
