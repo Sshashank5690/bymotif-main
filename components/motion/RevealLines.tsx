@@ -59,6 +59,9 @@ export function RevealLines({
         // emerge independently instead of sliding as one block.
         mask: "lines",
         autoSplit: true,
+        // aria-label is forbidden on <p>/<div> (generic roles). Keep the
+        // visible text readable instead of injecting invalid ARIA.
+        aria: "none",
         onSplit: (self) => {
           return gsap.from(self.lines, {
             // Stay inside the padded mask so descenders (g, y, p) aren’t clipped.
