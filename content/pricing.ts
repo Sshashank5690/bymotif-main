@@ -2,11 +2,27 @@
  * Public investment tiers — grounded in the byMotif proposal scope
  * (Cinematic Affairs / full studio engagement).
  *
- * Signature ($999) ≈ the complete proposal: custom design, full structure,
- * CMS, enquiry systems, SEO, hosting, 5-week build, 2 months support.
+ * Signature ($999, $799 promo through November) ≈ the complete proposal:
+ * custom design, full structure, CMS, enquiry systems, SEO, hosting,
+ * 5-week build, 2 months support.
  * Essential is a focused site without publishing systems.
  * Atelier expands craft, content depth and post-launch care.
  */
+
+/** Signature list price; promo sale ends end of November (IST). */
+export const signaturePromo = {
+  listPrice: 999,
+  salePrice: 799,
+  /** Inclusive calendar day — active through 30 Nov 2026 IST. */
+  endsOn: "2026-11-30",
+  label: "Until November",
+} as const;
+
+export function isSignaturePromoActive(now = new Date()) {
+  const end = new Date(`${signaturePromo.endsOn}T23:59:59+05:30`);
+  return now.getTime() <= end.getTime();
+}
+
 export const pricingTiers = [
   {
     id: "essential",
@@ -43,7 +59,10 @@ export const pricingTiers = [
   {
     id: "signature",
     name: "Signature",
-    price: 999,
+    price: signaturePromo.listPrice,
+    salePrice: signaturePromo.salePrice,
+    promoEndsOn: signaturePromo.endsOn,
+    promoLabel: signaturePromo.label,
     currency: "USD",
     tagline: "The full byMotif engagement — our recommended investment.",
     summary:
@@ -105,7 +124,30 @@ export const pricingTiers = [
   },
 ] as const;
 
-export type PricingTierId = (typeof pricingTiers)[number]["id"];
+export type PricingTier = (typeof pricingTiers)[number];
+export type PricingTierId = PricingTier["id"];
+
+type TierWithPromo = Extract<PricingTier, { salePrice: number }>;
+
+export function tierHasActivePromo(
+  tier: PricingTier,
+): tier is TierWithPromo & { salePrice: number } {
+  return (
+    "salePrice" in tier &&
+    typeof tier.salePrice === "number" &&
+    isSignaturePromoActive()
+  );
+}
+
+/** Price a visitor should see / pay right now. */
+export function getTierActivePrice(tier: PricingTier) {
+  return tierHasActivePromo(tier) ? tier.salePrice : tier.price;
+}
+
+/** List price to strike through when a promo is live; otherwise null. */
+export function getTierCompareAtPrice(tier: PricingTier) {
+  return tierHasActivePromo(tier) ? tier.price : null;
+}
 
 export const pricingNotes = {
   payment: "50% to begin · 50% before launch",
