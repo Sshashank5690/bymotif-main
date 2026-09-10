@@ -1,6 +1,6 @@
 import { site } from "@/content/site";
 import { capabilities } from "@/content/capabilities";
-import { getTierActivePrice, pricingTiers } from "@/content/pricing";
+import { pricingTiers } from "@/content/pricing";
 import { seo, siteFaqs } from "@/content/seo";
 import type { Project } from "@/types";
 
@@ -85,7 +85,7 @@ export function OrganizationSchema() {
                 position: capabilities.length + index + 1,
                 name: `${tier.name} website package`,
                 description: tier.summary,
-                price: getTierActivePrice(tier),
+                price: tier.price,
                 priceCurrency: tier.currency,
                 url: `${site.url}/pricing`,
                 availability: "https://schema.org/InStock",

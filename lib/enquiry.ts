@@ -55,7 +55,7 @@ export const projectOptions = [
 export const budgetOptions = [
   "Still figuring out the investment",
   "Essential — around $699",
-  "Signature — $799 until November (was $999)",
+  "Signature — around $999 (recommended)",
   "Atelier — around $1,399",
   "Something custom / open to discuss",
 ] as const;

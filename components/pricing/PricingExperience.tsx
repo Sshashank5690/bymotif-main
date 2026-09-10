@@ -4,14 +4,8 @@ import { useId, useRef, useState } from "react";
 import { Check, Minus } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
-import { PromoPrice } from "@/components/pricing/PromoPrice";
 import { ButtonLink } from "@/components/ui/Button";
-import {
-  getTierActivePrice,
-  getTierCompareAtPrice,
-  pricingTiers,
-  tierHasActivePromo,
-} from "@/content/pricing";
+import { pricingTiers } from "@/content/pricing";
 import { ease } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -23,48 +17,6 @@ function formatPrice(value: number) {
   }).format(value);
 }
 
-function TierPrice({
-  tier,
-  size,
-}: {
-  tier: (typeof pricingTiers)[number];
-  size: "compact" | "display";
-}) {
-  const active = getTierActivePrice(tier);
-  const compareAt = getTierCompareAtPrice(tier);
-  const promo = tierHasActivePromo(tier);
-
-  if (!promo || compareAt == null) {
-    return (
-      <span
-        className={cn(
-          "font-serif font-light leading-none tracking-[-0.02em] text-ink",
-          size === "display" && "text-[2.25rem] sm:text-[2.5rem]",
-          size === "compact" && "text-[1.75rem] sm:text-[2rem]",
-        )}
-      >
-        {formatPrice(active)}
-      </span>
-    );
-  }
-
-  return (
-    <span className="inline-flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-      <span
-        className={cn(
-          "font-serif font-light leading-none tracking-[-0.02em] text-quiet line-through decoration-quiet/70",
-          size === "display" && "text-[1.35rem] sm:text-[1.5rem]",
-          size === "compact" && "text-[1.05rem] sm:text-[1.15rem]",
-        )}
-        aria-hidden
-      >
-        {formatPrice(compareAt)}
-      </span>
-      <PromoPrice size={size}>{formatPrice(active)}</PromoPrice>
-    </span>
-  );
-}
-
 export function PricingExperience() {
   const defaultIndex = pricingTiers.findIndex((tier) => tier.highlight);
   const [index, setIndex] = useState(defaultIndex >= 0 ? defaultIndex : 1);
@@ -73,8 +25,6 @@ export function PricingExperience() {
   const tier = pricingTiers[index];
   const max = pricingTiers.length - 1;
   const progress = max === 0 ? 0 : index / max;
-  const activePrice = getTierActivePrice(tier);
-  const onPromo = tierHasActivePromo(tier);
 
   const setFromClientX = (clientX: number) => {
     const track = trackRef.current;
@@ -88,7 +38,10 @@ export function PricingExperience() {
     <div className="mx-auto max-w-3xl lg:max-w-4xl">
       {/* Compact Apple-like investment control */}
       <div className="relative overflow-hidden rounded-[1.75rem] border border-line-soft bg-paper/90 px-5 py-5 shadow-lift sm:px-7 sm:py-6">
-        <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+        >
           <div className="absolute -right-8 -top-10 h-32 w-40 rounded-full bg-peach/30 blur-[50px]" />
           <div className="absolute -bottom-12 -left-6 h-28 w-36 rounded-full bg-lavender/25 blur-[50px]" />
         </div>
@@ -103,21 +56,16 @@ export function PricingExperience() {
             </p>
           </div>
           <AnimatePresence mode="wait">
-            <motion.div
+            <motion.p
               key={tier.id}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.28, ease: ease.editorial }}
-              className="text-right"
+              className="font-serif text-[1.75rem] font-light leading-none tracking-[-0.02em] text-ink sm:text-[2rem]"
             >
-              <TierPrice tier={tier} size="compact" />
-              {onPromo && "promoLabel" in tier ? (
-                <p className="mt-1.5 font-sans text-[0.6rem] font-medium uppercase tracking-[0.16em] text-burgundy">
-                  {tier.promoLabel}
-                </p>
-              ) : null}
-            </motion.div>
+              {formatPrice(tier.price)}
+            </motion.p>
           </AnimatePresence>
         </div>
 
@@ -183,7 +131,7 @@ export function PricingExperience() {
               value={index}
               onChange={(event) => setIndex(Number(event.target.value))}
               className="pricing-slider-native absolute inset-0 z-20 h-full w-full cursor-pointer opacity-0"
-              aria-valuetext={`${tier.name}, ${formatPrice(activePrice)}`}
+              aria-valuetext={`${tier.name}, ${formatPrice(tier.price)}`}
             />
           </div>
 
@@ -191,9 +139,6 @@ export function PricingExperience() {
             {pricingTiers.map((item, itemIndex) => {
               const selected = itemIndex === index;
               const signatureActive = item.highlight && selected;
-              const itemPromo = tierHasActivePromo(item);
-              const itemPrice = getTierActivePrice(item);
-              const itemCompare = getTierCompareAtPrice(item);
 
               return (
                 <button
@@ -220,26 +165,11 @@ export function PricingExperience() {
                   </span>
                   <span
                     className={cn(
-                      "mt-1 flex flex-col items-center gap-0.5 font-serif text-[0.95rem] font-light",
+                      "mt-1 block font-serif text-[0.95rem] font-light",
                       selected ? "text-ink" : "text-stone",
                     )}
                   >
-                    {itemPromo && itemCompare != null ? (
-                      <>
-                        <span className="text-[0.7rem] text-quiet line-through">
-                          {formatPrice(itemCompare)}
-                        </span>
-                        <span
-                          className={cn(
-                            signatureActive && "pricing-promo-chip-text",
-                          )}
-                        >
-                          {formatPrice(itemPrice)}
-                        </span>
-                      </>
-                    ) : (
-                      formatPrice(itemPrice)
-                    )}
+                    {formatPrice(item.price)}
                   </span>
                 </button>
               );
@@ -274,25 +204,14 @@ export function PricingExperience() {
                     {tier.badge}
                   </span>
                 ) : null}
-                {onPromo && "promoLabel" in tier ? (
-                  <span className="rounded-full bg-[linear-gradient(110deg,#e8c8b4,#e0b0a8,#cec6d8)] px-2.5 py-0.5 font-sans text-[0.6rem] font-medium uppercase tracking-[0.14em] text-ink shadow-[0_2px_10px_rgba(184,140,130,0.28)]">
-                    {tier.promoLabel}
-                  </span>
-                ) : null}
               </div>
 
-              <h2 className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                <TierPrice tier={tier} size="display" />
-                <span className="align-middle font-sans text-[0.7rem] uppercase tracking-[0.14em] text-quiet">
+              <h2 className="mt-3 font-serif text-[2.25rem] font-light leading-none tracking-[-0.02em] text-ink sm:text-[2.5rem]">
+                {formatPrice(tier.price)}
+                <span className="ml-2 align-middle font-sans text-[0.7rem] uppercase tracking-[0.14em] text-quiet">
                   {tier.currency}
                 </span>
               </h2>
-              {onPromo ? (
-                <p className="mt-2 font-sans text-[0.75rem] text-burgundy">
-                  Save {formatPrice(tier.price - getTierActivePrice(tier))} on
-                  Signature through November.
-                </p>
-              ) : null}
 
               <p className="mt-3 max-w-[32ch] font-serif text-[1.05rem] font-light italic leading-snug text-stone">
                 {tier.tagline}

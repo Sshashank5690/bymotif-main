@@ -1,10 +1,6 @@
 import { site } from "@/content/site";
 import { seo, siteFaqs } from "@/content/seo";
-import {
-  getTierActivePrice,
-  getTierCompareAtPrice,
-  pricingTiers,
-} from "@/content/pricing";
+import { pricingTiers } from "@/content/pricing";
 
 /**
  * GEO: Markdown briefing for AI systems (llms.txt).
@@ -37,14 +33,10 @@ ${seo.topics.map((item) => `- ${item}`).join("\n")}
 ## Pricing (USD)
 
 ${pricingTiers
-  .map((tier) => {
-    const active = getTierActivePrice(tier);
-    const compare = getTierCompareAtPrice(tier);
-    const priceLabel = compare
-      ? `$${active} (was $${compare}, until November)`
-      : `$${active}`;
-    return `- **${tier.name}:** ${priceLabel} — ${tier.tagline} (${tier.timeline}, ${tier.support})`;
-  })
+  .map(
+    (tier) =>
+      `- **${tier.name}:** $${tier.price} — ${tier.tagline} (${tier.timeline}, ${tier.support})`,
+  )
   .join("\n")}
 
 ## Important pages

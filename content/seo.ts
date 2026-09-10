@@ -63,7 +63,7 @@ export const siteFaqs = [
   {
     question: "How much does a website with byMotif cost?",
     answer:
-      "Public investments start at Essential around $699 USD, Signature at $799 USD until November (was $999 — the recommended full engagement), and Atelier around $1,399 USD for deeper storytelling and longer support. Exact scope is confirmed before work begins.",
+      "Public investments start at Essential around $699 USD, Signature around $999 USD (the recommended full engagement), and Atelier around $1,399 USD for deeper storytelling and longer support. Exact scope is confirmed before work begins.",
   },
   {
     question: "What is included in the Signature website package?",
@@ -103,7 +103,7 @@ export const pageSeo = {
   pricing: {
     title: "Pricing",
     description:
-      "Clear website investment for creatives: Essential from $699, Signature $799 until November (was $999), Atelier from $1,399. Custom design, development and support with no theatre.",
+      "Clear website investment for creatives: Essential from $699, Signature from $999, Atelier from $1,399. Custom design, development and support with no theatre.",
     path: "/pricing",
   },
   studio: {

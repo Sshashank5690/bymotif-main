@@ -325,14 +325,6 @@
     position: relative;
     z-index: 1;
   }
-
-  /* Signature promo chip price — warm gradient text when tier is selected */
-  .pricing-promo-chip-text {
-    background: linear-gradient(110deg, #b86a5c, #e0a898, #9a7bb0, #e8c8b4);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-  }
 }
 
 /* ------------------------------------------------------------------
