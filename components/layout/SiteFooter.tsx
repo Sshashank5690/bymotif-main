@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Mail } from "lucide-react";
 
+import {
+  InstagramIcon,
+  LinkedInIcon,
+  MailIcon,
+} from "@/components/icons/SocialIcons";
 import { Wordmark } from "@/components/layout/Wordmark";
 import { navigation, site } from "@/content/site";
 
@@ -9,43 +13,6 @@ const studioLinks = [
   ...navigation,
   { label: "Contact", href: "/contact" },
 ] as const;
-
-function InstagramIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden
-    >
-      <rect x="2.5" y="2.5" width="19" height="19" rx="5" />
-      <circle cx="12" cy="12" r="4.25" />
-      <circle cx="17.35" cy="6.65" r="0.85" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function LinkedInIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden
-    >
-      <rect x="3" y="3" width="18" height="18" rx="2.5" />
-      <path d="M8 11v6M8 8.5v.01M12 17v-4.25a2.25 2.25 0 0 1 4.5 0V17" />
-    </svg>
-  );
-}
 
 const socialLinks = [
   {
@@ -61,7 +28,7 @@ const socialLinks = [
   {
     label: "Email",
     href: `mailto:${site.email}`,
-    Icon: Mail,
+    Icon: MailIcon,
   },
 ] as const;
 

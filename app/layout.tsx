@@ -1,11 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { OrganizationSchema } from "@/components/seo/StructuredData";
+import {
+  ThemeProvider,
+  themeInitScript,
+} from "@/components/theme/ThemeProvider";
 import { site } from "@/content/site";
 import { seo } from "@/content/seo";
 
@@ -85,17 +90,24 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F7F2EA",
-  colorScheme: "light",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F7F2EA" },
+    { media: "(prefers-color-scheme: dark)", color: "#161310" },
+  ],
+  colorScheme: "light dark",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-GB"
+      suppressHydrationWarning
       className={`${fraunces.variable} ${manrope.variable} ${desire.variable} h-full antialiased`}
     >
-      <body className="grain min-h-full bg-ivory">
+      <Script id="bymotif-theme-init" strategy="beforeInteractive">
+        {themeInitScript}
+      </Script>
+      <body className="grain min-h-full bg-ivory text-ink transition-colors duration-(--duration-soft) ease-editorial">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-6 focus:top-6 focus:z-[80] focus:rounded-full focus:bg-ink focus:px-6 focus:py-3 focus:text-label-lg focus:uppercase focus:tracking-[0.14em] focus:text-ivory"
@@ -103,11 +115,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
 
-        <SmoothScrollProvider>
-          <SiteHeader />
-          <main id="main">{children}</main>
-          <SiteFooter />
-        </SmoothScrollProvider>
+        <ThemeProvider>
+          <SmoothScrollProvider>
+            <SiteHeader />
+            <main id="main">{children}</main>
+            <SiteFooter />
+          </SmoothScrollProvider>
+        </ThemeProvider>
 
         <OrganizationSchema />
       </body>

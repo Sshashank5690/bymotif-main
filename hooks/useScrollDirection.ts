@@ -1,36 +1,43 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useScrollControls } from "@/components/providers/SmoothScrollProvider";
 
-/** Pixels of travel required before the header changes state, to stop jitter. */
-const THRESHOLD = 8;
-/** How far down the page the header starts wearing its glass surface. */
-const SETTLE_AT = 64;
+/** Glass + compact bar after this much scroll (works with Lenis via window.scrollY). */
+const SETTLE_AT = 28;
 
+function readScrollY() {
+  return (
+    window.scrollY ||
+    document.documentElement.scrollTop ||
+    document.body.scrollTop ||
+    0
+  );
+}
+
+/**
+ * Header scroll state for the fixed navbar.
+ * - `settled`: show glass + compact height
+ * - never auto-hides — stays visible while scrolling
+ */
 export function useScrollDirection() {
   const { subscribeToScroll } = useScrollControls();
-  const [hidden, setHidden] = useState(false);
+  const pathname = usePathname();
   const [settled, setSettled] = useState(false);
 
   useEffect(() => {
-    let previous = window.scrollY;
     let frame = 0;
+    let lastSettled = false;
 
     const update = () => {
-      const current = window.scrollY;
-      const delta = current - previous;
-
-      setSettled(current > SETTLE_AT);
-
-      if (Math.abs(delta) > THRESHOLD) {
-        // Never hide near the very top, where the header is part of the
-        // composition rather than an overlay.
-        setHidden(delta > 0 && current > SETTLE_AT * 2);
-        previous = current;
+      const next = readScrollY() > SETTLE_AT;
+      // Avoid redundant React renders on every Lenis tick.
+      if (next !== lastSettled) {
+        lastSettled = next;
+        setSettled(next);
       }
-
       frame = 0;
     };
 
@@ -41,12 +48,14 @@ export function useScrollDirection() {
 
     update();
     const unsubscribe = subscribeToScroll(onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
 
     return () => {
       unsubscribe();
+      window.removeEventListener("resize", onScroll);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, [subscribeToScroll]);
+  }, [subscribeToScroll, pathname]);
 
-  return { hidden, settled };
+  return { hidden: false, settled };
 }
