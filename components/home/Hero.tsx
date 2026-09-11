@@ -6,7 +6,10 @@ import { ArrowLink } from "@/components/ui/ArrowLink";
 
 export function Hero() {
   return (
-    <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
+    <section
+      data-site-hero
+      className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden"
+    >
       <HeroAtmosphere />
 
       <div className="relative mx-auto max-w-editorial px-gutter">

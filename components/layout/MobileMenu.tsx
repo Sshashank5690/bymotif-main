@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef } from "react";
 
+import { HeaderSocialLinks } from "@/components/layout/HeaderSocialLinks";
 import { Wordmark } from "@/components/layout/Wordmark";
 import { featuredProjects } from "@/content/projects";
 import { navigation, site } from "@/content/site";
@@ -57,15 +58,18 @@ export function MobileMenu({
           transition={{ duration: 0.45, ease: ease.editorial }}
           className="fixed inset-0 z-[80] flex flex-col bg-ivory outline-none lg:hidden"
         >
-          <div className="flex items-center justify-between px-gutter py-7">
+          <div className="flex items-center justify-between gap-4 px-gutter py-7">
             <Wordmark className="text-[24px]" />
-            <button
-              type="button"
-              onClick={onClose}
-              className="-m-3 p-3 font-sans text-label font-medium uppercase tracking-[0.18em] text-stone"
-            >
-              Close
-            </button>
+            <div className="flex items-center gap-2">
+              <HeaderSocialLinks />
+              <button
+                type="button"
+                onClick={onClose}
+                className="-m-3 p-3 font-sans text-label font-medium uppercase tracking-[0.18em] text-stone"
+              >
+                Close
+              </button>
+            </div>
           </div>
 
           <nav className="flex flex-1 flex-col justify-center px-gutter">
@@ -80,61 +84,52 @@ export function MobileMenu({
                     delay: 0.1 + index * 0.06,
                     ease: ease.editorial,
                   }}
-                  className="border-b border-line-soft"
                 >
                   <Link
                     href={link.href}
                     onClick={onClose}
                     className="flex items-baseline justify-between py-5 font-serif text-display-sm font-light text-ink"
                   >
-                    {link.label}
-                    <span
-                      aria-hidden
-                      className="font-sans text-label tracking-[0.18em] text-quiet"
-                    >
-                      0{index + 1}
+                    <span>{link.label}</span>
+                    <span className="font-sans text-label uppercase tracking-[0.18em] text-quiet">
+                      {String(index + 1).padStart(2, "0")}
                     </span>
                   </Link>
                 </motion.li>
               ))}
             </ul>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.35, ease: ease.editorial }}
-              className="mt-12"
-            >
-              <p className="font-sans text-label font-medium uppercase tracking-[0.18em] text-quiet">
-                Recent work
-              </p>
-              <div className="mt-5 flex gap-3">
-                {featuredProjects.slice(0, 3).map((project) => (
-                  <Link
-                    key={project.slug}
-                    href={`/work/${project.slug}`}
-                    onClick={onClose}
-                    aria-label={`${project.client} — view the story`}
-                    className="relative aspect-[3/4] w-full overflow-hidden bg-shell"
-                  >
-                    <Image
-                      src={project.cover.src}
-                      alt={project.cover.alt}
-                      fill
-                      sizes="30vw"
-                      className="object-cover"
-                    />
-                  </Link>
-                ))}
-              </div>
-            </motion.div>
           </nav>
 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.45, ease: ease.editorial }}
-            className="flex flex-col gap-1 px-gutter pb-10 pt-8 font-sans text-small text-stone"
+            transition={{ delay: 0.35, duration: 0.6, ease: ease.editorial }}
+            className="grid grid-cols-3 gap-2 px-gutter pb-4"
+          >
+            {featuredProjects.slice(0, 3).map((project) => (
+              <Link
+                key={project.slug}
+                href={`/work/${project.slug}`}
+                onClick={onClose}
+                className="relative aspect-[4/5] overflow-hidden rounded-xl"
+                aria-label={`${project.client} — view the story`}
+              >
+                <Image
+                  src={project.cover.src}
+                  alt=""
+                  fill
+                  sizes="33vw"
+                  className="object-cover"
+                />
+              </Link>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.55, ease: ease.editorial }}
+            className="flex flex-col gap-2 px-gutter pb-10 font-sans text-small text-stone"
           >
             <a href={`mailto:${site.email}`} className="link-reveal w-fit">
               {site.email}
