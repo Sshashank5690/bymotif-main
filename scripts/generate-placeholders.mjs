@@ -106,7 +106,6 @@ const PROJECT_SLUGS = [
   "estera-events",
   "moments-photography",
   "sarah-and-anshul",
-  "eshan-traju-photography",
   "dreamlife-wedding",
 ];
 
